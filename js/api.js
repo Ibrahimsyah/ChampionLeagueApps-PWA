@@ -17,3 +17,22 @@ function json(response){
 }
 
 //Exception Handler
+function error(err){ //from Promise Reject
+    console.log("Error: ",  err)
+}
+
+//Request Data
+function getTeamList(){
+    fetch(teamlist_api, {
+        headers : {
+            'X-Auth-Token' : api_key
+        }
+    })
+    .then(status)
+    .then(json)
+    .then(function(data){
+        data.teams.forEach(function(team){
+            console.log("Team: ", team)
+        })
+    })
+}
