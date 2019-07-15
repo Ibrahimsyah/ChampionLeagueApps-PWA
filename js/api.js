@@ -36,14 +36,20 @@ function getTeamList(){
             console.log("Team: ", team)
 
             articleHTML += `
-            <div class="card" style="width=300px">
-            <div class="card-image waves-effect waves-block waves-light">
-            <img src="${team.crestUrl}">
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s4">
+              <img src="${team.crestUrl}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
             </div>
-            <div class="card-content center">
-            ${team.name}
+            <div class="col s8">
+              <span class="black-text">
+                ${team.name}
+              </span>
             </div>
-            </div>
+          </div>
+        </div>
+      </div>
             `
             document.getElementById("teamlist").innerHTML = articleHTML
         })
