@@ -31,11 +31,11 @@ function getTeamList(){
     .then(status)
     .then(json)
     .then(function(data){
-        var articleHTML = ""
+        var teamItem = ""
         data.teams.forEach(function(team){
             console.log("Team: ", team)
 
-            articleHTML += `
+            teamItem += `
             <div class="col s12 m8 offset-m2 l6 offset-l3">
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
@@ -51,7 +51,46 @@ function getTeamList(){
         </div>
       </div>
             `
-            document.getElementById("teamlist").innerHTML = articleHTML
+            document.getElementById("teamlist").innerHTML = teamItem
+        })
+    })
+}
+function getSchedule(){
+    fetch(schedule_api, {
+        headers : {
+            'X-Auth-Token' : api_key
+        }
+    })
+    .then(status)
+    .then(json)
+    .then(function(data){
+        var scheduleItem = ""
+        console.log(data.matches)
+        data.matches.forEach(function(match){
+            scheduleItem += `
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s4">
+              <p class="center">${match.homeTeam.name}</p>
+            </div>
+            <div class="col s1">
+              <p class="center">${match.score.fullTime.homeTeam || 0}
+            </div>
+            <div class="col s2">
+              <p class="center"><b>:</b>
+            </div>
+            <div class="col s1">
+              <p class="center">${match.score.fullTime.awayTeam || 0}
+            </div>
+            <div class="col s4">
+            <p class="center">${match.awayTeam.name}</p>
+          </div>
+          </div>
+        </div>
+      </div>
+            `
+            document.getElementById("schedulelist").innerHTML = scheduleItem
         })
     })
 }
