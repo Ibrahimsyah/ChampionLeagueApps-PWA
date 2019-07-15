@@ -31,8 +31,21 @@ function getTeamList(){
     .then(status)
     .then(json)
     .then(function(data){
+        var articleHTML = ""
         data.teams.forEach(function(team){
             console.log("Team: ", team)
+
+            articleHTML += `
+            <div class="card" style="width=300px">
+            <div class="card-image waves-effect waves-block waves-light">
+            <img src="${team.crestUrl}">
+            </div>
+            <div class="card-content center">
+            ${team.name}
+            </div>
+            </div>
+            `
+            document.getElementById("teamlist").innerHTML = articleHTML
         })
     })
 }
