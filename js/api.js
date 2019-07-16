@@ -23,6 +23,36 @@ function error(err) { //from Promise Reject
 
 //Request Data
 function getTeamList() {
+  console.log("getTeamList Terpanggil")
+  if ('caches' in window) {
+    caches.match(teamlist_api).then(function (response) {
+      if (response) {
+        response.json().then(function (data) {
+          var teamItem = ""
+          data.teams.forEach(function (team) {
+
+            teamItem += `
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s4">
+              <img src="${team.crestUrl}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+            </div>
+            <div class="col s8">
+              <span class="black-text">
+                ${team.name}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+            `
+            document.getElementById("teamlist").innerHTML = teamItem
+          })
+        })
+      }
+    })
+  }
   fetch(teamlist_api, {
     headers: {
       'X-Auth-Token': api_key
@@ -55,6 +85,7 @@ function getTeamList() {
     })
 }
 function getSchedule() {
+  console.log("getSchedule Terpanggil")
   if ('caches' in window) {
     caches.match(schedule_api).then(function (response) {
       if (response) {
@@ -101,7 +132,6 @@ function getSchedule() {
     .then(json)
     .then(function (data) {
       var scheduleItem = ""
-      console.log(data.matches)
       data.matches.forEach(function (match) {
         scheduleItem += `
             <div class="col s12 m8 offset-m2 l6 offset-l3">
