@@ -23,7 +23,6 @@ function error(err) { //from Promise Reject
 
 //Request Data
 function getTeamList() {
-  console.log("getTeamList Terpanggil")
   if ('caches' in window) {
     caches.match(teamlist_api).then(function (response) {
       if (response) {
@@ -33,6 +32,7 @@ function getTeamList() {
 
             teamItem += `
             <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <a href="./team.html?id=${team.id}">
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
             <div class="col s4">
@@ -44,7 +44,7 @@ function getTeamList() {
               </span>
             </div>
           </div>
-        </div>
+          </div></a>
       </div>
             `
             document.getElementById("teamlist").innerHTML = teamItem
@@ -66,6 +66,7 @@ function getTeamList() {
 
         teamItem += `
             <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <a href="./team.html?id=${team.id}">
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
             <div class="col s4">
@@ -78,6 +79,7 @@ function getTeamList() {
             </div>
           </div>
         </div>
+        </a>
       </div>
             `
         document.getElementById("teamlist").innerHTML = teamItem
@@ -85,7 +87,6 @@ function getTeamList() {
     })
 }
 function getSchedule() {
-  console.log("getSchedule Terpanggil")
   if ('caches' in window) {
     caches.match(schedule_api).then(function (response) {
       if (response) {

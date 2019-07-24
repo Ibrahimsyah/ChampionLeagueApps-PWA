@@ -27,7 +27,6 @@ self.addEventListener("fetch", function (event) {
     var url = 
         "https://api.football-data.org/v2/competitions/2001/"
     var isContain = event.request.url.indexOf(url) > -1
-    console.log("isContain: ", isContain)
     if (isContain) {
         event.respondWith(
             caches.open(CACHE_NAME).then(function (cache) {
