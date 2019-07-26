@@ -168,23 +168,32 @@ function getTeamById() {
   var urlParams = new URLSearchParams(window.location.search)
   var idTeam = urlParams.get("id")
 
-  if('caches' in window){
+  if ('caches' in window) {
     console.log("caches ditemukan")
-    caches.match(teamdetail_api + idTeam).then(function(response){
-      if(response){
+    caches.match(teamdetail_api + idTeam).then(function (response) {
+      if (response) {
         console.log("cache ditemukan")
-        response.json().then(function(data){
-          console.log(data)
+        response.json().then(function (data) {
+          console.log(data.squad)
           var teamDetail = `
           <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
-                    <img src="${data.crestUrl}" />
+                    <img class="circle responsive-img circle-img" src="${data.crestUrl}" />
                   </div>
                   <div class="card-content">
-                    <span class="card-title">${data.name}</span>
-                  </div>
-                </div>
+                    <span class="card-title center-align">${data.name}</span>
+                    <div class="container">
           `
+          data.squad.forEach(function (player) {
+            var squadList = `
+            <div class="card-panel center">
+              <b>${player.position || "undefined"}</b><br>
+              ${player.name}
+            </div>
+            `
+            teamDetail += squadList
+          })
+          teamDetail += `</div></div></div>`
           document.getElementById("body-content").innerHTML = teamDetail
         })
       }
@@ -195,19 +204,28 @@ function getTeamById() {
       'X-Auth-Token': api_key
     }
   })
-  .then(status)
-  .then(json)
-  .then(function(data){
-    var teamDetail = `
+    .then(status)
+    .then(json)
+    .then(function (data) {
+      var teamDetail = `
     <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img src="${data.crestUrl}" />
+              <img class="circle responsive-img center-img" src="${data.crestUrl}" />
             </div>
             <div class="card-content">
-              <span class="card-title">${data.name}</span>
-            </div>
-          </div>
+              <span class="card-title center-align">${data.name}</span>
+            <div class="container">
     `
-    document.getElementById("body-content").innerHTML = teamDetail
-  })
+      data.squad.forEach(function (player) {
+        var squadList = `
+      <div class="card-panel center">
+        <b>${player.position || "undefined"}</b><br>
+        ${player.name}
+      </div>
+      `
+        teamDetail += squadList
+      })
+      teamDetail += `</div></div></div>`
+      document.getElementById("body-content").innerHTML = teamDetail
+    })
 }

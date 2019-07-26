@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (this.readyState == 4) {
                 if (this.status == 200) {
                     content.innerHTML = xhttp.responseText
-
+                    if (page == "teamlist") getTeamList()
+                    if (page == "schedule") getSchedule()
                 } else if (this.status == 404) {
                     content.innerHTML = "<p>Halaman tidak ditemukan</p>"
                 } else {
@@ -55,10 +56,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         xhttp.open("GET", "pages/" + page + ".html", true)
         xhttp.send()
-        setTimeout(function () {
-            if (page == "teamlist") getTeamList()
-            if (page == "schedule") getSchedule()
-
-        }, 50)
     }
 })

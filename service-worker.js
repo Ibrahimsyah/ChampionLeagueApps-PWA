@@ -6,6 +6,7 @@ var urlsToCache = [
     "/nav.html",
     "/team.html",
     "/css/materialize.min.css",
+    "/css/style.css",
     "/js/materialize.min.js",
     "/js/nav.js",
     "/js/api.js",
