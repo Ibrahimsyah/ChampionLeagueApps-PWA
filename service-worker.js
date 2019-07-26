@@ -4,6 +4,7 @@ var urlsToCache = [
     "/manifest.json",
     "/index.html",
     "/nav.html",
+    "/team.html",
     "/css/materialize.min.css",
     "/js/materialize.min.js",
     "/js/nav.js",
@@ -25,7 +26,7 @@ self.addEventListener("install", function (event) {
 
 self.addEventListener("fetch", function (event) {
     var url = 
-        "https://api.football-data.org/v2/competitions/2001/"
+        "https://api.football-data.org/"
     var isContain = event.request.url.indexOf(url) > -1
     if (isContain) {
         event.respondWith(
@@ -39,7 +40,7 @@ self.addEventListener("fetch", function (event) {
     } else {
         event.respondWith(
             caches
-                .match(event.request, { cacheName: CACHE_NAME })
+                .match(event.request, {ignoreSearch:true, cacheName: CACHE_NAME })
                 .then(function (response) {
                     if (response) {
                         return response

@@ -1,5 +1,6 @@
 const teamlist_api = "https://api.football-data.org/v2/competitions/2001/teams"
 const schedule_api = "https://api.football-data.org/v2/competitions/2001/matches"
+const teamdetail_api = "https://api.football-data.org/v2/teams/"
 const api_key = "07e2f287bafe413b815b0c33c87f66fa"
 
 function status(response) {
@@ -162,4 +163,51 @@ function getSchedule() {
         document.getElementById("schedulelist").innerHTML = scheduleItem
       })
     })
+}
+function getTeamById() {
+  var urlParams = new URLSearchParams(window.location.search)
+  var idTeam = urlParams.get("id")
+
+  if('caches' in window){
+    console.log("caches ditemukan")
+    caches.match(teamdetail_api + idTeam).then(function(response){
+      if(response){
+        console.log("cache ditemukan")
+        response.json().then(function(data){
+          console.log(data)
+          var teamDetail = `
+          <div class="card">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img src="${data.crestUrl}" />
+                  </div>
+                  <div class="card-content">
+                    <span class="card-title">${data.name}</span>
+                  </div>
+                </div>
+          `
+          document.getElementById("body-content").innerHTML = teamDetail
+        })
+      }
+    })
+  }
+  fetch(teamdetail_api + idTeam, {
+    headers: {
+      'X-Auth-Token': api_key
+    }
+  })
+  .then(status)
+  .then(json)
+  .then(function(data){
+    var teamDetail = `
+    <div class="card">
+            <div class="card-image waves-effect waves-block waves-light">
+              <img src="${data.crestUrl}" />
+            </div>
+            <div class="card-content">
+              <span class="card-title">${data.name}</span>
+            </div>
+          </div>
+    `
+    document.getElementById("body-content").innerHTML = teamDetail
+  })
 }
