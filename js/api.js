@@ -171,12 +171,9 @@ function getTeamById() {
     var idTeam = urlParams.get("id")
 
     if ('caches' in window) {
-      console.log("caches ditemukan")
       caches.match(teamdetail_api + idTeam).then(function (response) {
         if (response) {
-          console.log("cache ditemukan")
           response.json().then(function (data) {
-            console.log(data.squad)
             var teamDetail = `
           <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
@@ -237,22 +234,55 @@ function getTeamById() {
 
   })
 }
+function getSavedTeams() {
+  getAll().then(function (teams) {
+    var teamHTML = ""
+    teams.forEach(function (team) {
+      teamHTML += `
+      <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <a href="./team.html?id=${team.id}&saved=true">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s4">
+              <img src="${team.crestUrl}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+            </div>
+            <div class="col s8">
+              <span class="black-text">
+                ${team.name}
+              </span>
+            </div>
+          </div>
+          </div></a>
+      </div>
+      `
+      document.getElementById("teamlist").innerHTML = teamHTML
+    })
+  })
+}
 function getSavedTeamById() {
   var urlParams = new URLSearchParams(window.location.search)
   var idParam = urlParams.get("id")
 
   getById(idParam).then(function (team) {
     var teamHTML = `
-      <div class="card">
-        <div class="card-image waves-effect waves-block waves-light">
-          <img src="${team.cover}" />
-        </div>
-      <div class="card-content">
-      <span class="card-title">${article.post_title}</span>
-        ${snarkdown(team.post_content)}
+    <div class="card">
+      <div class="card-image waves-effect waves-block waves-light">
+          <img class="circle responsive-img circle-img" src="${team.crestUrl}" />
       </div>
-  </div>
+      <div class="card-content">
+        <span class="card-title center-align">${team.name}</span>
+      <div class="container">
     `
+    team.squad.forEach(function (player) {
+      var squadList = `
+    <div class="card-panel center">
+      <b>${player.position || "undefined"}</b><br>
+      ${player.name}
+    </div>
+    `
+      teamHTML += squadList
+    })
+    teamHTML += `</div></div></div>`
     document.getElementById("body-content").innerHTML = teamHTML
   })
 }

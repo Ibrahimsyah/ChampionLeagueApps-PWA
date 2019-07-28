@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     content.innerHTML = xhttp.responseText
                     if (page == "teamlist") getTeamList()
                     if (page == "schedule") getSchedule()
+                    if (page == "favourite") getSavedTeams()
                 } else if (this.status == 404) {
                     content.innerHTML = "<p>Halaman tidak ditemukan</p>"
                 } else {

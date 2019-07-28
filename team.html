@@ -55,23 +55,24 @@
         } else {
             console.log("ServiceWorker belum didukung browser ini.");
         }
-        document.addEventListener("DOMContentLoaded", function(){
+        document.addEventListener("DOMContentLoaded", function () {
             var urlParams = new URLSearchParams(window.location.search)
             var isFromSaved = urlParams.get("saved")
-            
+
             var save = document.getElementById("save")
 
-            if(isFromSaved){
+            if (isFromSaved) {
                 save.style.display = 'none'
                 getSavedTeamById()
-            }else{
+            } else {
                 var item = getTeamById()
             }
 
-            save.onclick = function(){
-                item.then(function(team){
+            save.onclick = function () {
+                item.then(function (team) {
                     saveTeam(team)
                 })
+
             }
         })
     </script>

@@ -12,12 +12,11 @@ function saveTeam(team){
     .then(function(db){
         var tx = db.transaction("teams", "readwrite")
         var store = tx.objectStore("teams")
-        console.log(team)
         store.add(team)
         return tx.complete
     })
     .then(function(){
-        console.log("team berhasil tersimpan ke favorit")
+        alert("team berhasil tersimpan ke favorit")
     })
 }
 
