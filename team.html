@@ -63,8 +63,15 @@
 
             if(isFromSaved){
                 save.style.display = 'none'
-
                 getSavedTeamById()
+            }else{
+                var item = getTeamById()
+            }
+
+            save.onclick = function(){
+                item.then(function(team){
+                    saveTeam(team)
+                })
             }
         })
     </script>

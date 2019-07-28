@@ -165,17 +165,19 @@ function getSchedule() {
     })
 }
 function getTeamById() {
-  var urlParams = new URLSearchParams(window.location.search)
-  var idTeam = urlParams.get("id")
+  return new Promise(function (resolve, reject) {
 
-  if ('caches' in window) {
-    console.log("caches ditemukan")
-    caches.match(teamdetail_api + idTeam).then(function (response) {
-      if (response) {
-        console.log("cache ditemukan")
-        response.json().then(function (data) {
-          console.log(data.squad)
-          var teamDetail = `
+    var urlParams = new URLSearchParams(window.location.search)
+    var idTeam = urlParams.get("id")
+
+    if ('caches' in window) {
+      console.log("caches ditemukan")
+      caches.match(teamdetail_api + idTeam).then(function (response) {
+        if (response) {
+          console.log("cache ditemukan")
+          response.json().then(function (data) {
+            console.log(data.squad)
+            var teamDetail = `
           <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
                     <img class="circle responsive-img circle-img" src="${data.crestUrl}" />
@@ -184,30 +186,32 @@ function getTeamById() {
                     <span class="card-title center-align">${data.name}</span>
                     <div class="container">
           `
-          data.squad.forEach(function (player) {
-            var squadList = `
+            data.squad.forEach(function (player) {
+              var squadList = `
             <div class="card-panel center">
               <b>${player.position || "undefined"}</b><br>
               ${player.name}
             </div>
             `
-            teamDetail += squadList
+              teamDetail += squadList
+            })
+            teamDetail += `</div></div></div>`
+            document.getElementById("body-content").innerHTML = teamDetail
+
+            resolve(data)
           })
-          teamDetail += `</div></div></div>`
-          document.getElementById("body-content").innerHTML = teamDetail
-        })
+        }
+      })
+    }
+    fetch(teamdetail_api + idTeam, {
+      headers: {
+        'X-Auth-Token': api_key
       }
     })
-  }
-  fetch(teamdetail_api + idTeam, {
-    headers: {
-      'X-Auth-Token': api_key
-    }
-  })
-    .then(status)
-    .then(json)
-    .then(function (data) {
-      var teamDetail = `
+      .then(status)
+      .then(json)
+      .then(function (data) {
+        var teamDetail = `
     <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
               <img class="circle responsive-img center-img" src="${data.crestUrl}" />
@@ -216,18 +220,22 @@ function getTeamById() {
               <span class="card-title center-align">${data.name}</span>
             <div class="container">
     `
-      data.squad.forEach(function (player) {
-        var squadList = `
+        data.squad.forEach(function (player) {
+          var squadList = `
       <div class="card-panel center">
         <b>${player.position || "undefined"}</b><br>
         ${player.name}
       </div>
       `
-        teamDetail += squadList
+          teamDetail += squadList
+        })
+        teamDetail += `</div></div></div>`
+        document.getElementById("body-content").innerHTML = teamDetail
+
+        resolve(data)
       })
-      teamDetail += `</div></div></div>`
-      document.getElementById("body-content").innerHTML = teamDetail
-    })
+
+  })
 }
 function getSavedTeamById() {
   var urlParams = new URLSearchParams(window.location.search)

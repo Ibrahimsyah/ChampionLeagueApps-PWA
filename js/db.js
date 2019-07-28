@@ -1,6 +1,6 @@
 var dbPromised = idb.open("champion-league-apps", 1, function (upgradeDb) {
     var articleObjectStore = upgradeDb.createObjectStore("teams", {
-        keyPath: "ID"
+        keyPath: "id"
     })
     articleObjectStore.createIndex("post_title", "post_title", {
         unique: false
@@ -13,7 +13,7 @@ function saveTeam(team){
         var tx = db.transaction("teams", "readwrite")
         var store = tx.objectStore("teams")
         console.log(team)
-        store.add(article.result)
+        store.add(team)
         return tx.complete
     })
     .then(function(){
