@@ -55,6 +55,18 @@
         } else {
             console.log("ServiceWorker belum didukung browser ini.");
         }
+        document.addEventListener("DOMContentLoaded", function(){
+            var urlParams = new URLSearchParams(window.location.search)
+            var isFromSaved = urlParams.get("saved")
+            
+            var save = document.getElementById("save")
+
+            if(isFromSaved){
+                save.style.display = 'none'
+
+                getSavedTeamById()
+            }
+        })
     </script>
 </body>
 

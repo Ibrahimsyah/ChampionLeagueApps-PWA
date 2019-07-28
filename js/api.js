@@ -229,3 +229,22 @@ function getTeamById() {
       document.getElementById("body-content").innerHTML = teamDetail
     })
 }
+function getSavedTeamById() {
+  var urlParams = new URLSearchParams(window.location.search)
+  var idParam = urlParams.get("id")
+
+  getById(idParam).then(function (team) {
+    var teamHTML = `
+      <div class="card">
+        <div class="card-image waves-effect waves-block waves-light">
+          <img src="${team.cover}" />
+        </div>
+      <div class="card-content">
+      <span class="card-title">${article.post_title}</span>
+        ${snarkdown(team.post_content)}
+      </div>
+  </div>
+    `
+    document.getElementById("body-content").innerHTML = teamHTML
+  })
+}
