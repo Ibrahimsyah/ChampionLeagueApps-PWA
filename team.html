@@ -28,7 +28,7 @@
     <div class="container" id="body-content"></div>
     <div class="fixed-action-btn">
         <a id="save" class="btn-floating btn-large indigo">
-            <i class="large material-icons">save</i>
+            <i id="save_button" class="large material-icons">favorite_border</i>
         </a>
     </div>
     <script type="text/javascript" src="https://unpkg.com/snarkdown@1.0.2/dist/snarkdown.umd.js"></script>
@@ -47,7 +47,7 @@
                     })
                     .catch(function () {
                         console.log("Pendaftaran ServiceWorker gagal");
-                    });
+                    })
             });
             document.addEventListener("DOMContentLoaded", function () {
                 getTeamById()
@@ -57,22 +57,33 @@
         }
         document.addEventListener("DOMContentLoaded", function () {
             var urlParams = new URLSearchParams(window.location.search)
-            var isFromSaved = urlParams.get("saved")
-
-            var save = document.getElementById("save")
-
-            if (isFromSaved) {
-                save.style.display = 'none'
-                getSavedTeamById()
-            } else {
-                var item = getTeamById()
-            }
-
-            save.onclick = function () {
-                item.then(function (team) {
-                    saveTeam(team)
+            var id = Number(urlParams.get("id"))
+            var save = document.getElementById("save_button")
+            var fav = false
+            var item = null
+            isFav(id)
+                .then(function (msg) {
+                    console.log("isFav = " + msg)
+                    fav = true
+                    save.innerHTML = "favorite"
+                    getSavedTeamById()
+                }).catch(function (e) {
+                    console.log("isFav = " + e)
+                    fav = false
+                    item = getTeamById()
                 })
 
+            save.onclick = function () {
+                if (!fav) {
+                    item.then(function (team) {
+                        saveTeam(team)
+                    })
+                    save.innerHTML = "favorite"
+                } else {
+                    deleteTeam(id)
+                    save.innerHTML = "favorite_border"
+                }
+                fav = !fav
             }
         })
     </script>

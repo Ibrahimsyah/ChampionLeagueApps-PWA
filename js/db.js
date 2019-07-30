@@ -7,43 +7,69 @@ var dbPromised = idb.open("champion-league-apps", 1, function (upgradeDb) {
     })
 })
 
-function saveTeam(team){
+function saveTeam(team) {
     dbPromised
-    .then(function(db){
-        var tx = db.transaction("teams", "readwrite")
-        var store = tx.objectStore("teams")
-        store.add(team)
-        return tx.complete
-    })
-    .then(function(){
-        alert("team berhasil tersimpan ke favorit")
+        .then(function (db) {
+            var tx = db.transaction("teams", "readwrite")
+            var store = tx.objectStore("teams")
+            store.add(team)
+            return tx.complete
+        })
+        .then(function () {
+            M.toast({ html: 'Tim berhasil tersimpan ke favorit' })
+        })
+}
+
+function getAll() {
+    return new Promise(function (resolve, reject) {
+        dbPromised
+            .then(function (db) {
+                var tx = db.transaction("teams", "readonly")
+                var store = tx.objectStore("teams")
+                return store.getAll()
+            })
+            .then(function (teams) {
+                resolve(teams)
+            })
     })
 }
 
-function getAll(){
-    return new Promise(function(resolve, reject){
+function getById(id) {
+    return new Promise(function (resolve, reject) {
         dbPromised
-        .then(function(db){
-            var tx = db.transaction("teams", "readonly")
-            var store = tx.objectStore("teams")
-            return store.getAll()
-        })
-        .then(function(teams){
-            resolve(teams)
-        })
+            .then(function (db) {
+                var tx = db.transaction("teams", "readonly")
+                var store = tx.objectStore("teams")
+                return store.get(id)
+            })
+            .then(function (team) {
+                resolve(team)
+            })
     })
 }
 
-function getById(id){
-    return new Promise(function(resolve, reject){
-        dbPromised
-        .then(function(db){
-            var tx = db.transaction("teams", "readonly")
+function deleteTeam(id) {
+    dbPromised
+        .then(function (db) {
+            var tx = db.transaction("teams", "readwrite")
             var store = tx.objectStore("teams")
-            return store.get(id)
+            store.delete(id)
+            return tx.complete
+        }).then(function () {
+            M.toast({ html: 'Tim dihapus dari favorit' })
         })
-        .then(function(team){
-            resolve(team)
-        })
+}
+
+function isFav(id) {
+    return new Promise(function (resolve, reject) {
+        dbPromised
+            .then(function (db) {
+                var tx = db.transaction("teams", "readonly")
+                var store = tx.objectStore("teams")
+                return store.get(id)
+            }).then(function (team) {
+                if (team != undefined) resolve("true")
+                else reject("false")
+            })
     })
 }
