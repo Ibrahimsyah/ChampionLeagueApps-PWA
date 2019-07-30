@@ -10,6 +10,8 @@ var urlsToCache = [
     "/js/materialize.min.js",
     "/js/nav.js",
     "/js/api.js",
+    "/db/idb.js",
+    "/db/db.js",
     "/pages/favourite.html",
     "/pages/home.html",
     "/pages/schedule.html",
