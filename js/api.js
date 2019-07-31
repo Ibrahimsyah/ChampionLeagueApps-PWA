@@ -37,7 +37,7 @@ function getTeamList() {
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
             <div class="col s4">
-              <img src="${team.crestUrl}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+              <img src="${team.crestUrl}" alt="logo ${team.name}" class="circle responsive-img"> <!-- notice the "circle" class -->
             </div>
             <div class="col s8">
               <span class="black-text">
@@ -71,7 +71,7 @@ function getTeamList() {
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
             <div class="col s4">
-              <img src="${team.crestUrl}" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+              <img src="${team.crestUrl}" alt="logo ${team.name}" class="circle responsive-img"> <!-- notice the "circle" class -->
             </div>
             <div class="col s8">
               <span class="black-text">
@@ -177,7 +177,7 @@ function getTeamById() {
             var teamDetail = `
           <div class="card">
                   <div class="card-image waves-effect waves-block waves-light">
-                    <img class="circle responsive-img circle-img" src="${data.crestUrl}" />
+                    <img class="circle responsive-img circle-img" src="${data.crestUrl}" alt="logo ${team.name}" />
                   </div>
                   <div class="card-content">
                     <span class="card-title center-align">${data.name}</span>
@@ -211,7 +211,7 @@ function getTeamById() {
         var teamDetail = `
     <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img class="circle responsive-img center-img" src="${data.crestUrl}" />
+              <img class="circle responsive-img center-img" src="${data.crestUrl}" alt="logo ${team.name}"/>
             </div>
             <div class="card-content">
               <span class="card-title center-align">${data.name}</span>
