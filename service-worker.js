@@ -1,5 +1,13 @@
-const CACHE_NAME = "myfootball-v1.1"
-var urlsToCache = [
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+
+if (workbox) {
+    console.log(`Workbox berhasil dimuat`);
+
+} else {
+    console.log(`Workbox gagal dimuat`);
+}
+
+workbox.precaching.precacheAndRoute([
     "/",
     "/manifest.json",
     "/index.html",
@@ -10,70 +18,39 @@ var urlsToCache = [
     "/js/materialize.min.js",
     "/js/nav.js",
     "/js/api.js",
-    "/db/idb.js",
-    "/db/db.js",
+    "/js/idb.js",
+    "/js/db.js",
     "/pages/favourite.html",
     "/pages/home.html",
     "/pages/schedule.html",
     "/pages/teamlist.html",
     "/logo.png"
-];
+])
 
-self.addEventListener("install", function (event) {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(function (cache) {
-            return cache.addAll(urlsToCache)
-        })
-    )
-})
-
-self.addEventListener("fetch", function (event) {
-    var url = 
-        "https://api.football-data.org/"
-    var isContain = event.request.url.indexOf(url) > -1
-    if (isContain) {
-        event.respondWith(
-            caches.open(CACHE_NAME).then(function (cache) {
-                return fetch(event.request).then(function (response) {
-                    cache.put(event.request.url, response.clone())
-                    return response
-                })
+workbox.routing.registerRoute(
+    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    new workbox.strategies.CacheFirst({
+        cacheName: 'images',
+        plugins: [
+            new workbox.expiration.Plugin({
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
             })
-        )
-    } else {
-        event.respondWith(
-            caches
-                .match(event.request, {ignoreSearch:true, cacheName: CACHE_NAME })
-                .then(function (response) {
-                    if (response) {
-                        return response
-                    }
-                    return fetch(event.request)
-                })
-        )
-    }
-})
+        ]
+    })
+);
 
-self.addEventListener("activate", function (event) {
-    event.waitUntil(
-        caches.keys().then(function (cacheName) {
-            return Promise.all(
-                cacheName.map(function (cacheName) {
-                    if (cacheName != CACHE_NAME) {
-                        return caches.delete(cacheName)
-                    }
-                })
-            )
-        })
-    )
-})
+workbox.routing.registerRoute(
+    new RegExp('https://api.football-data.org/'),
+    new workbox.strategies.StaleWhileRevalidate()
+)
 
-self.addEventListener("push", function(event){
+self.addEventListener("push", function (event) {
     var body
 
-    if(event.data){
+    if (event.data) {
         body = event.data.text()
-    }else{
+    } else {
         body = "Push Message no payload"
     }
 
